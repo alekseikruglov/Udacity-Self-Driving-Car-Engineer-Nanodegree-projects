@@ -1,47 +1,60 @@
 # **Finding Lane Lines on the Road** 
 
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
 
 ---
 
 **Finding Lane Lines on the Road**
 
 The goals / steps of this project are the following:
-* Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
+- Make a pipeline that finds lane lines on the road
+- Test the pipeline on images
+- Test the pipeline on videos
+<img src="./test_images_output/solidYellowCurve2.jpg " width="400">
 
 
 [//]: # (Image References)
 
-[image1]: ./examples/grayscale.jpg "Grayscale"
+
 
 ---
 
 ### Reflection
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+### 1. Pipeline desription
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+My pipeline consisted of 6 steps:
+1. Convert the image to gray scale
+<img src="./pipeline_images/grayscale.jpg " width="400">
+2. Apply gaussian blur to smooth the image and remove noize
+<img src="./pipeline_images/gaussianBlurImage.jpg " width="400">
+3. Detect edges using Canny
+<img src="./pipeline_images/edges.jpg " width="400">
+4. Take in account only the region of interest, which is determined by a polygon with 4 vertices
+<img src="./pipeline_images/maskedImage.jpg " width="400">
+5. Apply Hough transformation to detect lines, average this lines and extrapolate them for whole region of interest
+<img src="./pipeline_images/houghImage.jpg " width="400">
+6. Merge this detected lines with the original image
+<img src="./test_images_output/solidWhiteRight.jpg " width="400">
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
-
-![alt text][image1]
-
-
-### 2. Identify potential shortcomings with your current pipeline
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by following steps:
+1. Filter lines by their slope to avoid wrong detected lines and improve accuracy
+2. Separate all detected lines by their slope: lines with negative slope are on the left side and lines with positive slope are on the right side
+3. Calculate slope and intercept for each line  (line equation: y = mx + b, where m - slope, b - instersect)
+4. Find standart deviation of m and b and filter out all lines, which deviate more than 68% (1 sigma) from the mean value to improve the accuracy
+5. Extrapolate left and right lines for whole region of interst using the average line slope and intersect from the previous step
 
 
-One potential shortcoming would be what would happen when ... 
-
-Another shortcoming could be ...
 
 
-### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
+### 2. Shortcomings
 
-Another potential improvement could be to ...
+* This algorithm was adjusted for the test videos. Processing of videos with different conditions (for example by rain or in the night or by higher traffic) could be not accurate enough with this pipeline
+* If the road lines would have higher curvature, the algorithm may produce not correct results
+
+
+### 3. Possible improvements
+
+* Better tuning of parameters (Hough transformation parameters, Canny edge detection parameters)
+* Apply more filtering algorithms to improve accuracy
+* Improve the pipeline for lane lines with higher curvature
