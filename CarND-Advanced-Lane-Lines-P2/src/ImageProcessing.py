@@ -76,28 +76,118 @@ class ImageProcessing:
 
         return dst
 
+    def getRegionOfInterest(self, img):
+        #mask image to separate unnecessary object for lane line detection
+        
+        #image dimensions
+        imageShape = img.shape
+        x = imageShape[1]
+        y = imageShape[0]
 
-    def makeBinaryImage(self, img, s_thresh=(170, 255), sx_thresh=(20, 100)):
-        # Convert to HLS color space
-        hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
-        l_channel = hls[:,:,1]
-        s_channel = hls[:,:,2]
-        # Sobel x
-        sobelx = cv2.Sobel(l_channel, cv2.CV_64F, 1, 0) # Take the derivative in x
-        abs_sobelx = np.absolute(sobelx) # Absolute x derivative to accentuate lines away from horizontal
-        scaled_sobel = np.uint8(255*abs_sobelx/np.max(abs_sobelx))
+        #create mask as polygon with vertices
+        vertices = np.array([[(0,y),\
+                                (0.45*x, 0.55*y),\
+                                (0.55*x, 0.55*y),\
+                                (x,y)]], dtype=np.int32)
+
+        #defining a blank mask to start with
+        mask = np.zeros_like(img)   
         
-        # Threshold x gradient
-        sxbinary = np.zeros_like(scaled_sobel)
-        sxbinary[(scaled_sobel >= sx_thresh[0]) & (scaled_sobel <= sx_thresh[1])] = 1
+        #defining a 3 channel or 1 channel color to fill the mask with depending on the input image
+        if len(img.shape) > 2:
+            channel_count = img.shape[2]  # i.e. 3 or 4 depending on your image
+            ignore_mask_color = (255,) * channel_count
+        else:
+            ignore_mask_color = 255
+            
+        #filling pixels inside the polygon defined by "vertices" with the fill color    
+        cv2.fillPoly(mask, vertices, ignore_mask_color)
         
-        # Threshold color channel
-        s_binary = np.zeros_like(s_channel)
-        s_binary[(s_channel >= s_thresh[0]) & (s_channel <= s_thresh[1])] = 1
-        # Stack each channel
-        color_binary = np.dstack(( np.zeros_like(sxbinary), sxbinary, s_binary)) * 255
+        #returning the image only where mask pixels are nonzero
+        masked_image = cv2.bitwise_and(img, mask)
+
+        return masked_image
+
+    def absSobelThresh(self, img, orient='x', thresh=(20, 100)):
+        # Convert to grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        # Apply x or y gradient with the OpenCV Sobel() function
+        # and take the absolute value
+        if orient == 'x':
+            abs_sobel = np.absolute(cv2.Sobel(gray, cv2.CV_64F, 1, 0))
+        if orient == 'y':
+            abs_sobel = np.absolute(cv2.Sobel(gray, cv2.CV_64F, 0, 1))
+        # Rescale back to 8 bit integer
+        scaled_sobel = np.uint8(255*abs_sobel/np.max(abs_sobel))
+        # Create a copy and apply the threshold
+        binary_output = np.zeros_like(scaled_sobel)
+        # Here I'm using inclusive (>=, <=) thresholds, but exclusive is ok too
+        binary_output[(scaled_sobel >= thresh[0]) & (scaled_sobel <= thresh[1])] = 1
+
+        # Return the result
+        return binary_output
+
+    def magThreshold(self, img, sobel_kernel=3, mag_thresh=(30, 100)):
+        # Convert to grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        # Take both Sobel x and y gradients
+        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
+        sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
+        # Calculate the gradient magnitude
+        gradmag = np.sqrt(sobelx**2 + sobely**2)
+        # Rescale to 8 bit
+        scale_factor = np.max(gradmag)/255 
+        gradmag = (gradmag/scale_factor).astype(np.uint8) 
+        # Create a binary image of ones where threshold is met, zeros otherwise
+        binary_output = np.zeros_like(gradmag)
+        binary_output[(gradmag >= mag_thresh[0]) & (gradmag <= mag_thresh[1])] = 1
+
+        # Return the binary image
+        return binary_output
+
+    def dirThreshold(self, img, sobel_kernel=3, dir_thresh=(0.7, 1.3)):
+        # Grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        # Calculate the x and y gradients
+        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
+        sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
+        # Take the absolute value of the gradient direction, 
+        # apply a threshold, and create a binary image result
+        absgraddir = np.arctan2(np.absolute(sobely), np.absolute(sobelx))
+        binary_output =  np.zeros_like(absgraddir)
+        binary_output[(absgraddir >= dir_thresh[0]) & (absgraddir <= dir_thresh[1])] = 1
+
+        # Return the binary image
+        return binary_output
+
+
+    def makeBinaryImage(self, gradx, grady, mag_binary, dir_binary):
+        # combines  thresholds an color thresholds
+        combined = np.zeros_like(dir_binary)
+        combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1
+
+        return combined
+
+        # # Convert to HLS color space
+        # hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+        # l_channel = hls[:,:,1]
+        # s_channel = hls[:,:,2]
+        # # Sobel x
+        # sobelx = cv2.Sobel(l_channel, cv2.CV_64F, 1, 0, ksize=sobel_kernel) # Take the derivative in x
+        # abs_sobelx = np.absolute(sobelx) # Absolute x derivative to accentuate lines away from horizontal
+        # scaled_sobel = np.uint8(255*abs_sobelx/np.max(abs_sobelx))
         
-        return color_binary
+        # # Threshold x gradient
+        # sxbinary = np.zeros_like(scaled_sobel)
+        # sxbinary[(scaled_sobel >= sx_thresh[0]) & (scaled_sobel <= sx_thresh[1])] = 1
+        
+        # # Threshold color channel
+        # s_binary = np.zeros_like(s_channel)
+        # s_binary[(s_channel >= s_thresh[0]) & (s_channel <= s_thresh[1])] = 1
+        # # Stack each channel
+        # color_binary = np.dstack(( np.zeros_like(sxbinary), sxbinary, s_binary)) * 255
+
+        # return color_binary
   
 
     # def perspectiveTransform(self, img, nx, ny):
