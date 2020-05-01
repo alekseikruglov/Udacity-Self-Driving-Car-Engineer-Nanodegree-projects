@@ -160,71 +160,37 @@ class ImageProcessing:
         # Return the binary image
         return binary_output
 
+    def sChannelThreshold(self, img, thresh = (90,255)):
+        hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+        s_channel = hls[:,:,2]
+        binary_output = np.zeros_like(s_channel)
+        binary_output[(s_channel > thresh[0]) & (s_channel <= thresh[1])] = 1
+        return binary_output
 
-    def makeBinaryImage(self, gradx, grady, mag_binary, dir_binary):
-        # combines  thresholds an color thresholds
-        combined = np.zeros_like(dir_binary)
-        combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1
+
+    def makeBinaryImage(self, gradx, grady, magBinary, dirBinary, colorBinary):
+        # combines  thresholds and color thresholds
+        combined = np.zeros_like(dirBinary)
+        combined[((gradx == 1) & (grady == 1)) | ((magBinary == 1) & (dirBinary == 1)) & (colorBinary == 1)] = 1
 
         return combined
 
-        # # Convert to HLS color space
-        # hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
-        # l_channel = hls[:,:,1]
-        # s_channel = hls[:,:,2]
-        # # Sobel x
-        # sobelx = cv2.Sobel(l_channel, cv2.CV_64F, 1, 0, ksize=sobel_kernel) # Take the derivative in x
-        # abs_sobelx = np.absolute(sobelx) # Absolute x derivative to accentuate lines away from horizontal
-        # scaled_sobel = np.uint8(255*abs_sobelx/np.max(abs_sobelx))
+    def perspectiveTransform(self, img, srcPoints = np.float32([[250, 690], [580,460], [705,460], [1060,690]]), offset = 0):
+
+        #define destination points on transformed image
+        xDst = img.shape[1]
+        yDst = img.shape[0]
+        dstPoints = np.float32([[srcPoints[0][0], yDst],\
+                                [srcPoints[0][0], offset],\
+                                [srcPoints[3][0], offset],\
+                                [srcPoints[3][0], yDst]])
+
+        # Given src and dst points, calculate the perspective transform matrix
+        M = cv2.getPerspectiveTransform(srcPoints, dstPoints)
+        # Warp the image using OpenCV warpPerspective()
+        img_size = (img.shape[1], img.shape[0])
+        warped = cv2.warpPerspective(img, M, img_size)
+
+        # Return the resulting image and matrix
+        return warped, M
         
-        # # Threshold x gradient
-        # sxbinary = np.zeros_like(scaled_sobel)
-        # sxbinary[(scaled_sobel >= sx_thresh[0]) & (scaled_sobel <= sx_thresh[1])] = 1
-        
-        # # Threshold color channel
-        # s_binary = np.zeros_like(s_channel)
-        # s_binary[(s_channel >= s_thresh[0]) & (s_channel <= s_thresh[1])] = 1
-        # # Stack each channel
-        # color_binary = np.dstack(( np.zeros_like(sxbinary), sxbinary, s_binary)) * 255
-
-        # return color_binary
-  
-
-    # def perspectiveTransform(self, img, nx, ny):
-    #     # remove distortion
-    #     undist = self.undistortImage(img)
-
-
-
-
-
-    #     # Convert undistorted image to grayscale
-    #     gray = cv2.cvtColor(undist, cv2.COLOR_BGR2GRAY)
-    #     # Search for corners in the grayscaled image
-    #     ret, corners = cv2.findChessboardCorners(gray, (nx, ny), None)
-
-    #     if ret == True:
-    #         # If we found corners, draw them! (just for fun)
-    #         cv2.drawChessboardCorners(undist, (nx, ny), corners, ret)
-    #         # Choose offset from image corners to plot detected corners
-    #         # This should be chosen to present the result at the proper aspect ratio
-    #         # My choice of 100 pixels is not exact, but close enough for our purpose here
-    #         offset = 100 # offset for dst points
-    #         # Grab the image shape
-    #         img_size = (gray.shape[1], gray.shape[0])
-
-    #         # For source points I'm grabbing the outer four detected corners
-    #         src = np.float32([corners[0], corners[nx-1], corners[-1], corners[-nx]])
-    #         # For destination points, I'm arbitrarily choosing some points to be
-    #         # a nice fit for displaying our warped result 
-    #         # again, not exact, but close enough for our purposes
-    #         dst = np.float32([[offset, offset], [img_size[0]-offset, offset], 
-    #                                     [img_size[0]-offset, img_size[1]-offset], 
-    #                                     [offset, img_size[1]-offset]])
-    #         # Given src and dst points, calculate the perspective transform matrix
-    #         M = cv2.getPerspectiveTransform(src, dst)
-    #         # Warp the image using OpenCV warpPerspective()
-    #         warped = cv2.warpPerspective(undist, M, img_size)
-
-    #     # Return the resulting image and matrix
-    #     return warped, M

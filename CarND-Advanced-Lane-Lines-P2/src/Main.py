@@ -6,64 +6,10 @@ import pickle
 
 import ImageProcessing
 
-# # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
-# objp = np.zeros((6*9,3), np.float32)
-# objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 
-# # Arrays to store object points and image points from all the images.
-# objpoints = [] # 3d points in real world space
-# imgpoints = [] # 2d points in image plane.
-
-# # Make a list of calibration images
-# images = glob.glob('../camera_cal/calibration*.jpg')
-
-# # Step through the list and search for chessboard corners
-# for fname in images:
-#     img = cv2.imread(fname)
-#     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-
-#     # Find the chessboard corners
-#     ret, corners = cv2.findChessboardCorners(gray, (9,6),None)
-
-#     # If found, add object points, image points
-#     if ret == True:
-#         objpoints.append(objp)
-#         imgpoints.append(corners)
-
-#         # Draw and display the corners
-#         '''
-#         img = cv2.drawChessboardCorners(img, (9,6), corners, ret)
-#         cv2.imshow('img',img)
-#         cv2.waitKey(500)
-#         '''
-        
-
-# cv2.destroyAllWindows()
-
-# pickleOut = open("points.pickle", "wb")
-# pickle.dump([objpoints, imgpoints], pickleOut)
-# pickleOut.close()
-
-
-# objpoints = [] # 3d points in real world space
-# imgpoints = [] # 2d points in image plane.
-
-# pickleIn = open("points.pickle", "rb")
-# pickleData = pickle.load(pickleIn)
-# objpoints = pickleData[0]
-# imgpoints = pickleData[1]
-# pickleIn.close()
-
-# testImage = cv2.imread('../camera_cal/calibration1.jpg')
-# grayTestImge = cv2.cvtColor(testImage,cv2.COLOR_BGR2GRAY)
-# ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, grayTestImge.shape[::-1], None, None)
-# dst = cv2.undistort(testImage, mtx, dist, None, mtx)
-# #cv2.imshow('undistoted img',dst)
-# #cv2.waitKey(0)
-# plt.imshow(dst)
-# plt.show()
 
 imgProc = ImageProcessing.ImageProcessing()
+
 testImage = cv2.imread('../test_images/straight_lines1.jpg')
 testImage = cv2.cvtColor(testImage, cv2.COLOR_BGR2RGB)
 #testImage = cv2.imread('../camera_cal/calibration1.jpg')
@@ -73,17 +19,42 @@ gradx = imgProc.absSobelThresh(undist, 'x', (20,100))
 grady = imgProc.absSobelThresh(undist, 'y', (20,100))
 mag_binary = imgProc.magThreshold(undist)
 dir_binary = imgProc.dirThreshold(undist)
+sChannelBinary = imgProc.sChannelThreshold(undist)
+combinedBinaryImg = imgProc.makeBinaryImage(gradx, grady, mag_binary, dir_binary, sChannelBinary)
 
-binaryImg = imgProc.makeBinaryImage(gradx, grady, mag_binary, dir_binary)
-#binaryImg = imgProc.makeBinaryImage(undist)
-maskedImg = imgProc.getRegionOfInterest(binaryImg)
-plt.subplot(221)
-plt.imshow(testImage)
-plt.subplot(222)
-plt.imshow(undist)
-plt.subplot(223)
-plt.imshow(binaryImg, cmap = 'gray')
-plt.subplot(224)
-plt.imshow(maskedImg, cmap = 'gray')
-# plt.imshow(binaryImg, cmap = 'gray')
+f, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2, figsize=(14, 10))
+ax1.imshow(gradx, cmap = 'gray')
+ax1.set_title('gradx')
+ax2.imshow(grady, cmap = 'gray')
+ax2.set_title('grady')
+ax3.imshow(mag_binary, cmap = 'gray')
+ax3.set_title('mag_binary')
+ax4.imshow(dir_binary, cmap = 'gray')
+ax4.set_title('dir_binary')
+ax5.imshow(sChannelBinary, cmap = 'gray')
+ax5.set_title('sChannelBinary')
+ax6.imshow(combinedBinaryImg, cmap = 'gray')
+ax6.set_title('combinedBinaryImg')
+
+maskedImg = imgProc.getRegionOfInterest(combinedBinaryImg)
+
+undistImagePerspectiveTransformed, M1 = imgProc.perspectiveTransform(undist)
+maskedBinaryperspectiveTransform, M2 = imgProc.perspectiveTransform(maskedImg)
+
+
+f, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2, figsize=(14, 10))
+ax1.imshow(testImage)
+ax1.set_title('Original Image')
+ax2.imshow(undist)
+ax2.set_title('Undistorted Image')
+ax3.imshow(combinedBinaryImg, cmap = 'gray')
+ax3.set_title('Combined binary Image')
+ax4.imshow(maskedImg, cmap = 'gray')
+ax4.set_title('Masked binary Image')
+ax5.imshow(undistImagePerspectiveTransformed)
+ax5.set_title('Undistorted image perspective transform')
+ax6.imshow(maskedBinaryperspectiveTransform, cmap = 'gray')
+ax6.set_title('Masked binary image perspective transform')
+
+
 plt.show()
