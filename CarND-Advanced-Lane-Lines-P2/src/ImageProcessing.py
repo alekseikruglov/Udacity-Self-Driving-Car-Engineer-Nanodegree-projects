@@ -96,9 +96,9 @@ class ImageProcessing:
         #defining a 3 channel or 1 channel color to fill the mask with depending on the input image
         if len(img.shape) > 2:
             channel_count = img.shape[2]  # i.e. 3 or 4 depending on your image
-            ignore_mask_color = (255,) * channel_count
+            ignore_mask_color = (1,) * channel_count
         else:
-            ignore_mask_color = 255
+            ignore_mask_color = 1
             
         #filling pixels inside the polygon defined by "vertices" with the fill color    
         cv2.fillPoly(mask, vertices, ignore_mask_color)
@@ -184,6 +184,16 @@ class ImageProcessing:
                                 [srcPoints[0][0], offset],\
                                 [srcPoints[3][0], offset],\
                                 [srcPoints[3][0], yDst]])
+
+        #draw lines on image
+        # lines = [[[srcPoints[i][0],
+        #         srcPoints[i][1],
+        #         srcPoints[(i+1) % len(srcPoints)][0],
+        #         srcPoints[(i+1) % len(srcPoints)][1]]] for i in range(len(srcPoints))]
+
+        # for line in lines:
+        #     for x1, y1, x2, y2 in line:
+        #         cv2.line(img, (x1, y1), (x2, y2), color=[255, 0, 0], thickness=1)
 
         # Given src and dst points, calculate the perspective transform matrix
         M = cv2.getPerspectiveTransform(srcPoints, dstPoints)

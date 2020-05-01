@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 import pickle
 
 import ImageProcessing
+import LineDetection
 
 
 
 imgProc = ImageProcessing.ImageProcessing()
+lineDet = LineDetection.LineDetection()
 
-testImage = cv2.imread('../test_images/straight_lines1.jpg')
+testImage = cv2.imread('../test_images/test5.jpg')
 testImage = cv2.cvtColor(testImage, cv2.COLOR_BGR2RGB)
 #testImage = cv2.imread('../camera_cal/calibration1.jpg')
 undist = imgProc.undistortImage(testImage)
@@ -39,7 +41,7 @@ ax6.set_title('combinedBinaryImg')
 maskedImg = imgProc.getRegionOfInterest(combinedBinaryImg)
 
 undistImagePerspectiveTransformed, M1 = imgProc.perspectiveTransform(undist)
-maskedBinaryperspectiveTransform, M2 = imgProc.perspectiveTransform(maskedImg)
+maskedBinaryPerspectiveTransform, M2 = imgProc.perspectiveTransform(maskedImg)
 
 
 f, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2, figsize=(14, 10))
@@ -53,8 +55,19 @@ ax4.imshow(maskedImg, cmap = 'gray')
 ax4.set_title('Masked binary Image')
 ax5.imshow(undistImagePerspectiveTransformed)
 ax5.set_title('Undistorted image perspective transform')
-ax6.imshow(maskedBinaryperspectiveTransform, cmap = 'gray')
+ax6.imshow(maskedBinaryPerspectiveTransform, cmap = 'gray')
 ax6.set_title('Masked binary image perspective transform')
 
+
+# leftx, lefty, rightx, righty, oImg, histogram = lineDet.findLanePixels(maskedBinaryPerspectiveTransform)
+ploty, left_fitx, right_fitx, out_img = lineDet.fitPolynomial(maskedBinaryPerspectiveTransform)
+f, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2, figsize=(14, 10))
+ax1.plot( np.sum(maskedBinaryPerspectiveTransform[maskedBinaryPerspectiveTransform.shape[0]//2:,:], axis=0))
+ax1.set_title('Histogram') 
+
+ax2.imshow(out_img)
+ax2.plot(left_fitx, ploty)
+ax2.plot(right_fitx, ploty)
+ax2.set_title('Polynomial fit') 
 
 plt.show()
