@@ -3,6 +3,8 @@ import cv2
 import glob
 import matplotlib.pyplot as plt
 import pickle
+from moviepy.editor import VideoFileClip
+import time
 
 import ImageProcessing
 import LineDetection
@@ -16,6 +18,9 @@ class Pipeline:
 
 
     def imagePipeline(self, img):
+
+        #measure time of execution
+        start = time.time()
 
         #undistort image
         undist = self.imgProc.undistortImage(img)
@@ -61,5 +66,20 @@ class Pipeline:
         #put calculated center deviation on the image
         cv2.putText(resultImg, 'Deviation from center: ' + str(centerDev) + 'm', (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
         
+
+        #measure time of execution
+        stop = time.time()
+        print("execution time: " + str(stop-start))
+
+
         return resultImg
+
+
+
+    def videoPipeline(self, srcVideoPath, outVideoPath):
+
+        clip1 = VideoFileClip(srcVideoPath).subclip(0,3)
+
+        project_clip = clip1.fl_image(self.imagePipeline) #NOTE: this function expects color images!!
+        project_clip.write_videofile(outVideoPath, threads=2, audio=False, fps=25)
 
