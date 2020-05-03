@@ -7,6 +7,10 @@ import cv2
 
 class LineDetection:
 
+    # Define conversions in x and y from pixels space to meters
+    ymPerPix = 30/720 # meters per pixel in y dimension
+    xmPerPix = 3.7/700 # meters per pixel in x dimension
+
     #def __init__():
 
     def findLanePixels(self, img):
@@ -93,30 +97,89 @@ class LineDetection:
 
     def fitPolynomial(self, img):
         # Find our lane pixels first
-        leftx, lefty, rightx, righty, out_img = self.findLanePixels(img)
+        leftx, lefty, rightx, righty, outImg = self.findLanePixels(img)
 
         # Fit a second order polynomial to each using `np.polyfit`
-        left_fit = np.polyfit(lefty, leftx, 2)
-        right_fit = np.polyfit(righty, rightx, 2)
+        # polynom coefficients for left and reight fit polynoms
+        leftFitCoeffs = np.polyfit(lefty, leftx, 2)
+        rightFitCoeffs = np.polyfit(righty, rightx, 2)
 
         # Generate x and y values for plotting
         ploty = np.linspace(0, img.shape[0]-1, img.shape[0] )
         try:
-            left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
-            right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
+            leftFitx = leftFitCoeffs[0]*ploty**2 + leftFitCoeffs[1]*ploty + leftFitCoeffs[2]
+            rightFitx = rightFitCoeffs[0]*ploty**2 + rightFitCoeffs[1]*ploty + rightFitCoeffs[2]
         except TypeError:
             # Avoids an error if `left` and `right_fit` are still none or incorrect
             print('The function failed to fit a line!')
-            left_fitx = 1*ploty**2 + 1*ploty
-            right_fitx = 1*ploty**2 + 1*ploty
+            leftFitx = 1*ploty**2 + 1*ploty
+            rightFitx = 1*ploty**2 + 1*ploty
 
         ## Visualization ##
         # Colors in the left and right lane regions
-        out_img[lefty, leftx] = [255, 0, 0]
-        out_img[righty, rightx] = [0, 0, 255]
+        outImg[lefty, leftx] = [255, 0, 0]
+        outImg[righty, rightx] = [0, 0, 255]
 
         # Plots the left and right polynomials on the lane lines
         # plt.plot(left_fitx, ploty, color='yellow')
         # plt.plot(right_fitx, ploty, color='yellow')
 
-        return ploty, left_fitx, right_fitx, out_img
+        return ploty, leftFitx, rightFitx, leftFitCoeffs, rightFitCoeffs, outImg
+
+    def measureCurvaturePixels(self, img):
+        '''
+        Calculates the curvature of polynomial functions in pixels.
+        '''
+
+        # fit polynoms and get polynom coefficients
+        ploty, leftFitx, rightFitx, leftFitCoeffs, rightFitCoeffs, outImg = self.fitPolynomial(img)
+        
+        # Define y-value where we want radius of curvature
+        # We'll choose the maximum y-value, corresponding to the bottom of the image
+        yEval = np.max(ploty)
+        
+        # Calculation of R_curve (radius of curvature)
+        leftCurveRad = ((1 + (2*leftFitCoeffs[0]*yEval + leftFitCoeffs[1])**2)**1.5) / np.absolute(2*leftFitCoeffs[0])
+        rightCurveRad = ((1 + (2*rightFitCoeffs[0]*yEval + rightFitCoeffs[1])**2)**1.5) / np.absolute(2*rightFitCoeffs[0])
+        
+        return leftCurveRad, rightCurveRad
+
+    def measureCurvatureMeters(self, ploty, leftFitCoeffs, rightFitCoeffs):
+        '''
+        Calculates the curvature of polynomial functions in meters.
+        '''
+
+        # fit polynoms and get polynom coefficients
+        # ploty, leftFitx, rightFitx, leftFitCoeffs, rightFitCoeffs, outImg = self.fitPolynomial(img)
+        
+        # Define y-value where we want radius of curvature
+        # We'll choose the maximum y-value, corresponding to the bottom of the image
+        yEval = np.max(ploty)
+        
+        # Calculation of R_curve (radius of curvature)
+        leftCurveRad = ((1 + (2*leftFitCoeffs[0]*yEval*self.ymPerPix + leftFitCoeffs[1])**2)**1.5) / np.absolute(2*leftFitCoeffs[0])
+        rightCurveRad = ((1 + (2*rightFitCoeffs[0]*yEval*self.ymPerPix + rightFitCoeffs[1])**2)**1.5) / np.absolute(2*rightFitCoeffs[0])
+        
+        return leftCurveRad, rightCurveRad
+
+
+    def calculteCarDeviationFromLaneCenter(self, img, leftFitX, rightFitX):
+        
+        #points of the lines closest to the caar
+        xLaneLeft = leftFitX[0]
+        xLaneRight = rightFitX[0]
+
+        #image center = camera center
+        imgCenterPos = img.shape[1]//2
+
+        #deviation from image center
+        dev = abs(imgCenterPos - (abs(xLaneLeft - xLaneRight)/2 + xLaneLeft))
+
+        #convert to meters, round to 2 decimals
+        dev = np.round(dev*self.xmPerPix, 2)
+        
+        return dev
+
+
+
+

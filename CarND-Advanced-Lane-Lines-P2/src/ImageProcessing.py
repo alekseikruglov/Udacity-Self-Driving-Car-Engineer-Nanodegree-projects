@@ -171,7 +171,7 @@ class ImageProcessing:
     def makeBinaryImage(self, gradx, grady, magBinary, dirBinary, colorBinary):
         # combines  thresholds and color thresholds
         combined = np.zeros_like(dirBinary)
-        combined[((gradx == 1) & (grady == 1)) | ((magBinary == 1) & (dirBinary == 1)) & (colorBinary == 1)] = 1
+        combined[((gradx == 1) & (grady == 1)) | ((magBinary == 1) & (dirBinary == 1)) | (colorBinary == 1)] = 1
 
         return combined
 
@@ -197,10 +197,31 @@ class ImageProcessing:
 
         # Given src and dst points, calculate the perspective transform matrix
         M = cv2.getPerspectiveTransform(srcPoints, dstPoints)
+        invM = cv2.getPerspectiveTransform(dstPoints, srcPoints)   #nneded to transform the detected lines bck to original image
         # Warp the image using OpenCV warpPerspective()
         img_size = (img.shape[1], img.shape[0])
         warped = cv2.warpPerspective(img, M, img_size)
 
         # Return the resulting image and matrix
-        return warped, M
+        return warped, M, invM
         
+
+    def drawLineOnOriginalImage(self, warped, undist, ploty, leftFitX, rightFitX, Minv):
+        # Create an image to draw the lines on
+        warp_zero = np.zeros_like(warped).astype(np.uint8)
+        color_warp = np.dstack((warp_zero, warp_zero, warp_zero))
+
+        # Recast the x and y points into usable format for cv2.fillPoly()
+        pts_left = np.array([np.transpose(np.vstack([leftFitX, ploty]))])
+        pts_right = np.array([np.flipud(np.transpose(np.vstack([rightFitX, ploty])))])
+        pts = np.hstack((pts_left, pts_right))
+
+        # Draw the lane onto the warped blank image
+        cv2.fillPoly(color_warp, np.int_([pts]), (0,255, 0))
+
+        # Warp the blank back to original image space using inverse perspective matrix (Minv)
+        newwarp = cv2.warpPerspective(color_warp, Minv, (undist.shape[1], undist.shape[0])) 
+        # Combine the result with the original image
+        result = cv2.addWeighted(undist, 1, newwarp, 0.3, 0)
+        #plt.imshow(result)
+        return result
