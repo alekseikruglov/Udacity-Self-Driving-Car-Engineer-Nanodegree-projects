@@ -19,9 +19,6 @@ class Pipeline:
 
     def imagePipeline(self, img):
 
-        #measure time of execution
-        start = time.time()
-
         #undistort image
         undist = self.imgProc.undistortImage(img)
 
@@ -38,7 +35,7 @@ class Pipeline:
         #combine all binry imges together
         combinedBinaryImg = self.imgProc.makeBinaryImage(gradx, grady, mag_binary, dir_binary, sChannelBinary)
 
-        #apply mask to image to separte the are of interest
+        #apply mask to image to separte the area of interest
         maskedImg = self.imgProc.getRegionOfInterest(combinedBinaryImg)
 
         #transform perspective to "bird-eye" view
@@ -48,7 +45,6 @@ class Pipeline:
         #fit 2-nd order polynom for left aand right line
         #put the polynom lines on the imge 
         ploty, leftFitx, rightFitx, leftFitCoeffs, rightFitCoeffs, outImg = self.lineDet.fitPolynomial(maskedBinaryPerspectiveTransform)
-
 
         #Calculate curvature
         leftCurveRad, rightCurveRad = self.lineDet.measureCurvatureMeters(ploty, leftFitCoeffs, rightFitCoeffs)
@@ -66,20 +62,14 @@ class Pipeline:
         #put calculated center deviation on the image
         cv2.putText(resultImg, 'Deviation from center: ' + str(centerDev) + 'm', (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
         
-
-        #measure time of execution
-        stop = time.time()
-        print("execution time: " + str(stop-start))
-
-
         return resultImg
 
 
 
     def videoPipeline(self, srcVideoPath, outVideoPath):
 
-        clip1 = VideoFileClip(srcVideoPath).subclip(0,3)
+        clip1 = VideoFileClip(srcVideoPath)
 
-        project_clip = clip1.fl_image(self.imagePipeline) #NOTE: this function expects color images!!
-        project_clip.write_videofile(outVideoPath, threads=2, audio=False, fps=25)
+        project_clip = clip1.fl_image(self.imagePipeline) 
+        project_clip.write_videofile(outVideoPath, audio=False)
 

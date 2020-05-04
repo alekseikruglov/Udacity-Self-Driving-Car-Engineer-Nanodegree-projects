@@ -12,12 +12,12 @@ import Pipeline
 
 pLine = Pipeline.Pipeline()
 
-testImage = cv2.imread('../test_images/test1.jpg')
-testImage = cv2.cvtColor(testImage, cv2.COLOR_BGR2RGB)
-outImg = pLine.imagePipeline(testImage)
+# testImage = cv2.imread('../test_images/test1.jpg')
+# testImage = cv2.cvtColor(testImage, cv2.COLOR_BGR2RGB)
+# outImg = pLine.imagePipeline(testImage)
 
-plt.imshow(outImg)
-plt.show()
+# plt.imshow(outImg)
+# plt.show()
 
 
 # project_output = '../output_videos/project_video.mp4'
@@ -27,5 +27,5 @@ plt.show()
 # project_clip.write_videofile(project_output, audio=False)
 
 
-#pLine.videoPipeline("../project_video.mp4", '../output_videos/project_video.mp4')
+pLine.videoPipeline("../project_video.mp4", '../output_videos/project_video.mp4')
 

@@ -15,7 +15,7 @@ import pickle
 class ImageProcessing:
 
     def __init__(self):
-        self.objpoints, self.imgpoints = self.calibrateCamera()
+        self.objpoints, self.imgpoints, self.mtx, self.dist = self.calibrateCamera()
 
     def calibrateCamera(self):
         # # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
@@ -66,13 +66,16 @@ class ImageProcessing:
         imgpoints = pickleData[1]
         pickleIn.close()
 
-        return objpoints, imgpoints
+        img = cv2.imread('../camera_cal/calibration1.jpg')
+        gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+        ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+
+        return objpoints, imgpoints, mtx, dist
 
 
     def undistortImage(self, img):
-        grayIamge = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-        ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, grayIamge.shape[::-1], None, None)
-        dst = cv2.undistort(img, mtx, dist, None, mtx)
+
+        dst = cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
 
         return dst
 
