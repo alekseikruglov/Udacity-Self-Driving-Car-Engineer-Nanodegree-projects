@@ -8,6 +8,7 @@ import time
 
 import ImageProcessing
 import LineDetection
+import Line
 
 
 class Pipeline:
@@ -15,6 +16,10 @@ class Pipeline:
     def __init__(self):
         self.imgProc = ImageProcessing.ImageProcessing()
         self.lineDet = LineDetection.LineDetection()
+
+        #previous detected lines (for tracking)
+        self.leftLine = Line.Line()
+        self.rightLine = Line.Line()
 
 
     def imagePipeline(self, img):
@@ -43,32 +48,57 @@ class Pipeline:
 
         #detect left nd right lines 
         #fit 2-nd order polynom for left aand right line
-        #put the polynom lines on the imge 
-        ploty, leftFitx, rightFitx, leftFitCoeffs, rightFitCoeffs, outImg = self.lineDet.fitPolynomial(maskedBinaryPerspectiveTransform)
+        #put the polynom lines on the image 
+        ploty, leftFitx, rightFitx, leftFitCoeffs, rightFitCoeffs, outImg = self.lineDet.fitPolynomial(maskedBinaryPerspectiveTransform, self.leftLine, self.rightLine)
 
-        #Calculate curvature
-        leftCurveRad, rightCurveRad = self.lineDet.measureCurvatureMeters(ploty, leftFitCoeffs, rightFitCoeffs)
-        averageCurvature = np.round( (leftCurveRad + rightCurveRad) / 2) #calculate average curvature value for left an dright lines
+        #check if the detected lines are real lane lines
+        if self.lineDet.sanityCheck(leftFitx, rightFitx) or self.leftLine.detected == False:
+            #add data to Line-objects
+            self.leftLine.detected = True
+            self.rightLine.detected = True
 
+            self.leftLine.setRecentXFitted(leftFitx)
+            self.rightLine.setRecentXFitted(rightFitx)
+
+            self.leftLine.setPolyCoeffs(leftFitCoeffs)
+            self.rightLine.setPolyCoeffs(rightFitCoeffs)
+
+            #Calculate curvature
+            leftCurveRad, rightCurveRad = self.lineDet.measureCurvatureMeters(ploty, self.leftLine.getAveragePolyCoeffs(), self.rightLine.getAveragePolyCoeffs())
+            #averageCurvature = np.round( (leftCurveRad + rightCurveRad) / 2) #calculate average curvature value for left an dright lines
+
+            #calculte car deviation from lane center
+            centerDev = self.lineDet.calculteCarDeviationFromLaneCenter(outImg, self.leftLine.getAveragXFitted(), self.rightLine.getAveragXFitted())
+
+            self.leftLine.setRadiusOfCurvature(leftCurveRad)
+            self.rightLine.setRadiusOfCurvature(rightCurveRad)
+
+            self.leftLine.setLineBasePos(centerDev)
+            self.rightLine.setLineBasePos(centerDev)
+        
+        
         #draw the lane on the original image
-        resultImg = self.imgProc.drawLineOnOriginalImage(maskedBinaryPerspectiveTransform, undist, ploty, leftFitx, rightFitx, invM)
+        resultImg = self.imgProc.drawLineOnOriginalImage(maskedBinaryPerspectiveTransform, undist, ploty, self.leftLine.getAveragXFitted(), self.rightLine.getAveragXFitted(), invM)
         
         #put calculated curvature on the image
+        averageCurvature = np.round( (self.leftLine.getAverageCurvRadius() + self.rightLine.getAverageCurvRadius() ) / 2) #calculate average curvature value for left and right lines
         cv2.putText(resultImg, 'Curvature: ' + str(averageCurvature) + ' m', (10,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
-        #calculte car deviation fromlane center
-        centerDev = self.lineDet.calculteCarDeviationFromLaneCenter(resultImg, leftFitx, rightFitx)
-
+        
         #put calculated center deviation on the image
-        cv2.putText(resultImg, 'Deviation from center: ' + str(centerDev) + 'm', (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+        cv2.putText(resultImg, 'Deviation from center: ' + str(np.round(self.leftLine.getAverageLineBasePos(), 2)) + 'm', (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+
         
         return resultImg
 
 
 
-    def videoPipeline(self, srcVideoPath, outVideoPath):
+    def videoPipeline(self, srcVideoPath, outVideoPath, startTime = None, endTime = None):
 
-        clip1 = VideoFileClip(srcVideoPath)
+        if (startTime == None) and (endTime == None):
+            clip1 = VideoFileClip(srcVideoPath)
+        else:
+            clip1 = VideoFileClip(srcVideoPath).subclip(startTime, endTime)
 
         project_clip = clip1.fl_image(self.imagePipeline) 
         project_clip.write_videofile(outVideoPath, audio=False)
