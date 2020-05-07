@@ -1,3 +1,4 @@
+'''
 #includes methods for:
 #camera calibration
 #image undistortion
@@ -5,6 +6,7 @@
 #color transform
 #gradient
 #creating of binary image
+'''
 
 import numpy as np
 import cv2
@@ -18,53 +20,44 @@ class ImageProcessing:
         self.objpoints, self.imgpoints, self.mtx, self.dist = self.calibrateCamera()
 
     def calibrateCamera(self):
-        # # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
-        # objp = np.zeros((6*9,3), np.float32)
-        # objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
-
-        # # Arrays to store object points and image points from all the images.
-        # objpoints = [] # 3d points in real world space
-        # imgpoints = [] # 2d points in image plane.
-
-        # # Make a list of calibration images
-        # images = glob.glob('../camera_cal/calibration*.jpg')
-
-        # # Step through the list and search for chessboard corners
-        # for fname in images:
-        #     img = cv2.imread(fname)
-        #     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-
-        #     # Find the chessboard corners
-        #     ret, corners = cv2.findChessboardCorners(gray, (9,6),None)
-
-        #     # If found, add object points, image points
-        #     if ret == True:
-        #         objpoints.append(objp)
-        #         imgpoints.append(corners)
-
-        #         # Draw and display the corners
-        #         '''
-        #         img = cv2.drawChessboardCorners(img, (9,6), corners, ret)
-        #         cv2.imshow('img',img)
-        #         cv2.waitKey(500)
-        #         '''
-                
-
-        # cv2.destroyAllWindows()
-
-        # pickleOut = open("points.pickle", "wb")
-        # pickle.dump([objpoints, imgpoints], pickleOut)
-        # pickleOut.close()
-
-
+        # Arrays to store object points and image points from all the images.
         objpoints = [] # 3d points in real world space
         imgpoints = [] # 2d points in image plane.
 
-        pickleIn = open("points.pickle", "rb")
-        pickleData = pickle.load(pickleIn)
-        objpoints = pickleData[0]
-        imgpoints = pickleData[1]
-        pickleIn.close()
+        #check, if .pickle file is already available
+        picklePathes = glob.glob('*.pickle')
+        if 'points.pickle' not in picklePathes:
+            # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+            objp = np.zeros((6*9,3), np.float32)
+            objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
+
+            # Make a list of calibration images
+            images = glob.glob('../camera_cal/calibration*.jpg')
+
+            # Step through the list and search for chessboard corners
+            for fname in images:
+                img = cv2.imread(fname)
+                gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+                # Find the chessboard corners
+                ret, corners = cv2.findChessboardCorners(gray, (9,6),None)
+
+                # If found, add object points, image points
+                if ret == True:
+                    objpoints.append(objp)
+                    imgpoints.append(corners)
+
+            #write object and image points to file, to save time with camera calibration
+            pickleOut = open("points.pickle", "wb")
+            pickle.dump([objpoints, imgpoints], pickleOut)
+            pickleOut.close()
+
+        else:
+            pickleIn = open("points.pickle", "rb")
+            pickleData = pickle.load(pickleIn)
+            objpoints = pickleData[0]
+            imgpoints = pickleData[1]
+            pickleIn.close()
 
         img = cv2.imread('../camera_cal/calibration1.jpg')
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -74,10 +67,9 @@ class ImageProcessing:
 
 
     def undistortImage(self, img):
-
         dst = cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
-
         return dst
+
 
     def getRegionOfInterest(self, img):
         #mask image to separate unnecessary object for lane line detection
@@ -188,16 +180,6 @@ class ImageProcessing:
                                 [srcPoints[3][0], offset],\
                                 [srcPoints[3][0], yDst]])
 
-        #draw lines on image
-        # lines = [[[srcPoints[i][0],
-        #         srcPoints[i][1],
-        #         srcPoints[(i+1) % len(srcPoints)][0],
-        #         srcPoints[(i+1) % len(srcPoints)][1]]] for i in range(len(srcPoints))]
-
-        # for line in lines:
-        #     for x1, y1, x2, y2 in line:
-        #         cv2.line(img, (x1, y1), (x2, y2), color=[255, 0, 0], thickness=1)
-
         # Given src and dst points, calculate the perspective transform matrix
         M = cv2.getPerspectiveTransform(srcPoints, dstPoints)
         invM = cv2.getPerspectiveTransform(dstPoints, srcPoints)   #nneded to transform the detected lines bck to original image
@@ -226,5 +208,5 @@ class ImageProcessing:
         newwarp = cv2.warpPerspective(color_warp, Minv, (undist.shape[1], undist.shape[0])) 
         # Combine the result with the original image
         result = cv2.addWeighted(undist, 1, newwarp, 0.3, 0)
-        #plt.imshow(result)
+        
         return result

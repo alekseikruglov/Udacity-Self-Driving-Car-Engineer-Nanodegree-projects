@@ -65,7 +65,6 @@ class Pipeline:
 
             #Calculate curvature
             leftCurveRad, rightCurveRad = self.lineDet.measureCurvatureMeters(ploty, self.leftLine.getAveragePolyCoeffs(), self.rightLine.getAveragePolyCoeffs())
-            #averageCurvature = np.round( (leftCurveRad + rightCurveRad) / 2) #calculate average curvature value for left an dright lines
 
             #calculte car deviation from lane center
             centerDev = self.lineDet.calculteCarDeviationFromLaneCenter(outImg, self.leftLine.getAveragXFitted(), self.rightLine.getAveragXFitted())
@@ -75,6 +74,9 @@ class Pipeline:
 
             self.leftLine.setLineBasePos(centerDev)
             self.rightLine.setLineBasePos(centerDev)
+        else:
+            self.leftLine.detected = False
+            self.rightLine.detected = False
         
         
         #draw the lane on the original image
@@ -84,13 +86,10 @@ class Pipeline:
         averageCurvature = np.round( (self.leftLine.getAverageCurvRadius() + self.rightLine.getAverageCurvRadius() ) / 2) #calculate average curvature value for left and right lines
         cv2.putText(resultImg, 'Curvature: ' + str(averageCurvature) + ' m', (10,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
-        
         #put calculated center deviation on the image
         cv2.putText(resultImg, 'Deviation from center: ' + str(np.round(self.leftLine.getAverageLineBasePos(), 2)) + 'm', (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
-        
         return resultImg
-
 
 
     def videoPipeline(self, srcVideoPath, outVideoPath, startTime = None, endTime = None):

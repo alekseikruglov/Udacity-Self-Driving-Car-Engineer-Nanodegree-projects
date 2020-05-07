@@ -12,20 +12,19 @@ import Pipeline
 
 pLine = Pipeline.Pipeline()
 
-# testImage = cv2.imread('../test_images/test1.jpg')
+# process image
+# testImage = cv2.imread('../test_images/straight_lines1.jpg')
 # testImage = cv2.cvtColor(testImage, cv2.COLOR_BGR2RGB)
 # outImg = pLine.imagePipeline(testImage)
 
+# f = plt.figure()
 # plt.imshow(outImg)
+# f.savefig('../output_images/straight_lines1.png', dpi=f.dpi, bbox_inches='tight')
+
 # plt.show()
 
 
-# project_output = '../output_videos/project_video.mp4'
-# clip1 = VideoFileClip("../project_video.mp4").subclip(0,3)
-
-# project_clip = clip1.fl_image(pLine.imagePipeline) #NOTE: this function expects color images!!
-# project_clip.write_videofile(project_output, audio=False)
-
-
+#process video
 pLine.videoPipeline("../project_video.mp4", '../output_videos/project_video.mp4')
+
 
