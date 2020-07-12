@@ -52,7 +52,7 @@ signs data set:
 
 Here is an exploratory visualization of the data set. It is a bar chart showing how the data was distributed for training, testing and validation sets.
 
-<img src="./images_for_writeup/data_set_distribution.png" width = 500 >
+<img src="./images_for_writeup/data_set_distribution.png" title = "Data set distribution" width = 500 >
 
 ### Model Architecture
 
@@ -62,7 +62,7 @@ As a first step, I normalized the image data to achieve mean zero and equal vari
 
 Here is an example of a traffic sign image before and after normalization.
 
-<img src="./images_for_writeup/comparison_original_and_normalized.png" width = 400 >
+<img src="./images_for_writeup/comparison_original_and_normalized.png" title = "Original and normalized images" width = 400 >
 
 
 I decided to generate additional data because the original data distribution has not equal amount of images for each sign (class ID).
@@ -71,13 +71,13 @@ To add more data to the the data set, I used the image shearing with skimage lib
 
 Here is an example of an original image and an augmented image:
 
-<img src="./images_for_writeup/comparison_normalized_augmented.png" width = 400 >
+<img src="./images_for_writeup/comparison_normalized_augmented.png" title = "Original and augmented images" width = 400 >
 
 The difference between the original data set and the augmented data set is the perspective of the image. The image shearing is defined randomly. 
 
 Here is the distribution of augmented data:
 
-<img src="./images_for_writeup/data_set_distribution_augmented.png" width = 500 >
+<img src="./images_for_writeup/data_set_distribution_augmented.png" title = "Augmented data set distribution" width = 500 >
 
 The new size of training set is `55678`
 

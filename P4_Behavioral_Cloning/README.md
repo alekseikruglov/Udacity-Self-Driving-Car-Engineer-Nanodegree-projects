@@ -7,7 +7,7 @@ Overview
 This repository contains Udacity Behavioral Cloning Project. The simulator provided by Udacity was used to collect data of human driving. This data was used to train a convolution neural network which was built in this project using Keras library. Finally the CNN was trained to drive the car autonomously around the track.
 
 <p align="center">
-  <img src="./README_images/full_loop_4X.gif" alt = "Model visualization" width = 400 />
+  <img src="./README_images/full_loop_4X.gif" title = "Model visualization" alt = "Model visualization" width = 400 />
 </p>
 
 
@@ -125,7 +125,7 @@ The data ditribution of steering angles is not even, 0 degree steering angle is 
 To icrease the data set and improve the model accuracy the recordered images were augmented by flipping. The steering angle for flipped images became the opposite sign.
 
 <p align="center"> 
-    <img src="./README_images/not_flipped.PNG" alt="Original image" width = 300>     
+    <img src="./README_images/not_flipped.png" title= "Original image" alt="Original image" width = 300>     
     <img src="./README_images/flipped.PNG" title="Flipped image" alt="Flipped image" width = 300 >
 </p>
 
@@ -137,13 +137,13 @@ The images were cropped 70 pixels in the top and 20 pixels in the bottom to remo
 
 <center>Original image </center>
 <p align="center"> 
-    <img src="./README_images/not_cropped.PNG"  alt="Original image" width = 305>     
+    <img src="./README_images/not_cropped.png" title = "Original image" alt="Original image" width = 305>     
 </p>
 
 
 <center>Cropped image </center>
 <p align="center">   
-    <img src="./README_images/cropped.PNG"  alt="Cropped image" width = 305 >
+    <img src="./README_images/cropped.PNG" title = "Cropped image" alt="Cropped image" width = 305 >
 </p>
 
 #### Image normalization
@@ -175,7 +175,7 @@ Here is a visualization of the architecture:
 
 
 <p align="center">
-  <img src="./README_images/model_visualization.png" alt = "Model visualization" width = 180 />
+  <img src="./README_images/model_visualization.PNG" title = "Model visualization" alt = "Model visualization" width = 180 />
 </p>
 
 Befor data augmentation I randomly shuffled the data set and put 20% of the data into a validation set. Only the training set data was augmented.
@@ -183,7 +183,7 @@ Befor data augmentation I randomly shuffled the data set and put 20% of the data
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 8 as evidenced by much slower loss decrease after 8 epochs. I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 <p align="center">
-  <img src="./README_images/train_val_loss.png" alt = "Model visualization" width = 400 />
+  <img src="./README_images/train_val_loss.png" title = "Model visualization" alt = "Model visualization" width = 400 />
 </p>
 
 ### Results
