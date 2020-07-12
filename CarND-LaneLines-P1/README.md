@@ -1,7 +1,9 @@
 # **Finding Lane Lines on the Road** 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+<p align="center">
+<img src="test_videos_output/video.gif" width="480" alt="Combined Image" />
+</p>
 
 Overview
 ---
@@ -33,14 +35,23 @@ This pipeline includes following steps for lane lines detection:
 
 * Image conversion to grayscale, applying of Gaussian filter to reduce noize and Canny edge detection
 
+<p align="center">
 <img src="pipeline_images/gaussianBlurImage.jpg" width="350"  /> <img src="pipeline_images/edges.jpg" width="350"  />
+</p>
 
 * Applying of a mask to the image to separate the region of interest. Using of Hough transformation to detect the lines. The detected lines by Hough transformation are then filtered, averaged and extrapolated for the whole region of interest, which results in two solid red lines for left and right road lane lines
 
-<img src="pipeline_images/maskedImage.jpg" width="350"  /> <img src="pipeline_images/houghImage.jpg" width="350"  />
+<p align="center">
+    <img src="pipeline_images/maskedImage.jpg" width="350"  /> <img src="pipeline_images/houghImage.jpg" width="350"  />
+</p>
 
 * Finally the original image can be combined with detected lines
-<img src="test_images_output/solidWhiteRight.jpg" width="480"  /> 
+
+<p align="center">
+    <img src="test_images_output/solidWhiteRight.jpg" width="480"  /> 
+</p>
+
+
 
 Results
 ---

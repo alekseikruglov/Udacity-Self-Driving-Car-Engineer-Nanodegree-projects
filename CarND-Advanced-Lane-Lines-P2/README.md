@@ -6,7 +6,7 @@
 The detection of lane lines using computer vision approach is implemented in this project.
 
 <p align="center">
-  <img src="./output_images/video.gif" title = "Advanced lane detection" alt="Advanced lane detection" width="400" />
+  <img src="./output_images/video.gif" title = "Advanced lane detection" alt="Advanced lane detection" width="600" />
 </p>
 
 
