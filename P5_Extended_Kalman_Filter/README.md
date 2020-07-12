@@ -6,31 +6,31 @@ Udacity Self-Driving Car Engineer Nanodegree Program
 In this project an Extended Kalman Filter was utilized in C++ to estimate the state of a moving object of interest using Sensor Fusion of noisy LIDAR and RADAR measurements. 
 
 <p align="center">
-  <img src="./README_images/gif_video.gif" alt = "Kalman filter visualization" width = 600 />
+  <img src="./README_images/gif_video.gif" alt = "Kalman filter visualization" width = "600" />
 </p>
 
 <p align="center">
-  <img src="./README_images/video_legend.png" alt = "Kalman filter visualization" width = 140 />
+  <img src="./README_images/video_legend.png" alt = "Kalman filter visualization" width = "140" />
 </p>
 
 
 The Kalman Filter predicts the objects's state after a time interval using a mathematical model and clarifies the state using the measurement information. 
 
 <p align="center">
-  <img src="./README_images/predict_update.png" alt = "Kalman filter process" width = 600 />
+  <img src="./README_images/predict_update.png" alt = "Kalman filter process" width = "600" />
 </p>
 
 In this project the measurement data is in 2D, so four states are estimated by Kalman Filter: x-position, y-position, x-velocity, y-velocity:
 
 <p align="center">
-  <img src="./README_images/kf_prediction.png" alt = "Kalman filter states" width = 600 />
+  <img src="./README_images/kf_prediction.png" alt = "Kalman filter states" width = "600" />
 </p>
 
 
 Sensor fusion combines LIDAR and RADAR data together to make accurate object tracking with Extended Kalman Filter (EKF):
 
 <p align="center">
-  <img src="./README_images/plan.png" alt = "Kalman filter general process" width = 600 />
+  <img src="./README_images/plan.png" alt = "Kalman filter general process" width = "600" />
 </p>
 
 
@@ -81,7 +81,7 @@ The resulting Extended Kalman Filter estimations (green) are almost the same as 
 
 
 <p align="center">
-  <img src="./README_images/full_way.png" alt = "Full way" width = 800 />
+  <img src="./README_images/full_way.png" alt = "Full way" width = "800" />
 </p>
 
 The Extended Kalman Filter has following RMSE in position and velocity components:
