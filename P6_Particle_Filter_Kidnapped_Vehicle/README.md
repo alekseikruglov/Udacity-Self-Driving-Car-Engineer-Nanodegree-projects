@@ -1,4 +1,6 @@
-# Particel Filter - Kidnapped Vehicle
+# Particle Filter - Kidnapped Vehicle
+
+Udacity Self-Driving Car Engineer Nanodegree Program
 
 ## Overview
 In this project a two dimensional particle filter for vehicle localization was implemented in C++. The particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step the filter will also get observation and control data.
