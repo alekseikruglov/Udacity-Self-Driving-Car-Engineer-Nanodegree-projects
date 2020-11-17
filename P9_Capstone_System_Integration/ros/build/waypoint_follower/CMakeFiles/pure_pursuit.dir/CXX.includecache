@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/student/CarND-Capstone/ros/devel/include/styx_msgs/Lane.h
+/home/workspace/CarND-Capstone/ros/devel/include/styx_msgs/Lane.h
 string
 -
 vector
@@ -26,7 +26,7 @@ std_msgs/Header.h
 styx_msgs/Waypoint.h
 -
 
-/home/student/CarND-Capstone/ros/devel/include/styx_msgs/Waypoint.h
+/home/workspace/CarND-Capstone/ros/devel/include/styx_msgs/Waypoint.h
 string
 -
 vector
@@ -46,7 +46,7 @@ geometry_msgs/PoseStamped.h
 geometry_msgs/TwistStamped.h
 -
 
-/home/student/CarND-Capstone/ros/src/waypoint_follower/include/libwaypoint_follower.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/include/libwaypoint_follower.h
 iostream
 -
 sstream
@@ -58,9 +58,9 @@ tf/transform_broadcaster.h
 tf/transform_listener.h
 -
 styx_msgs/Lane.h
-/home/student/CarND-Capstone/ros/src/waypoint_follower/include/styx_msgs/Lane.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/include/styx_msgs/Lane.h
 
-/home/student/CarND-Capstone/ros/src/waypoint_follower/include/pure_pursuit_core.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/include/pure_pursuit_core.h
 ros/ros.h
 -
 geometry_msgs/TwistStamped.h
@@ -70,17 +70,77 @@ geometry_msgs/PoseStamped.h
 memory
 -
 libwaypoint_follower.h
-/home/student/CarND-Capstone/ros/src/waypoint_follower/include/libwaypoint_follower.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/include/libwaypoint_follower.h
 
-/home/student/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit.cpp
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit.cpp
 pure_pursuit_core.h
-/home/student/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit_core.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit_core.h
 
-/home/student/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit_core.cpp
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit_core.cpp
 ros/ros.h
-/home/student/CarND-Capstone/ros/src/waypoint_follower/src/ros/ros.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/src/ros/ros.h
 pure_pursuit_core.h
-/home/student/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit_core.h
+/home/workspace/CarND-Capstone/ros/src/waypoint_follower/src/pure_pursuit_core.h
+
+/opt/ros/kinetic/include/boost_161_condition_variable.h
+boost/thread/detail/platform.hpp
+-
+boost/thread/win32/condition_variable.hpp
+-
+boost_161_pthread_condition_variable.h
+/opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
+
+/opt/ros/kinetic/include/boost_161_pthread_condition_variable.h
+boost_161_pthread_condition_variable_fwd.h
+/opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
+boost/thread/pthread/timespec.hpp
+-
+boost/thread/pthread/pthread_mutex_scoped_lock.hpp
+-
+boost/thread/pthread/thread_data.hpp
+-
+boost/chrono/system_clocks.hpp
+-
+boost/chrono/ceil.hpp
+-
+boost/thread/detail/delete.hpp
+-
+boost/config/abi_prefix.hpp
+-
+boost/config/abi_suffix.hpp
+-
+
+/opt/ros/kinetic/include/boost_161_pthread_condition_variable_fwd.h
+boost/assert.hpp
+-
+boost/throw_exception.hpp
+-
+pthread.h
+-
+boost/thread/cv_status.hpp
+-
+boost/thread/mutex.hpp
+-
+boost/thread/lock_types.hpp
+-
+boost/thread/thread_time.hpp
+-
+boost/thread/pthread/timespec.hpp
+-
+boost/thread/xtime.hpp
+-
+boost/chrono/system_clocks.hpp
+-
+boost/chrono/ceil.hpp
+-
+boost/thread/detail/delete.hpp
+-
+boost/date_time/posix_time/posix_time_duration.hpp
+-
+boost/config/abi_prefix.hpp
+-
+boost/config/abi_suffix.hpp
+-
 
 /opt/ros/kinetic/include/geometry_msgs/Point.h
 string
@@ -363,6 +423,14 @@ ros/time.h
 /opt/ros/kinetic/include/ros/ros/time.h
 
 /opt/ros/kinetic/include/ros/callback_queue.h
+boost/version.hpp
+-
+boost_161_condition_variable.h
+/opt/ros/kinetic/include/ros/boost_161_condition_variable.h
+boost/thread/condition_variable.hpp
+-
+boost/thread/condition_variable.hpp
+-
 ros/callback_queue_interface.h
 /opt/ros/kinetic/include/ros/ros/callback_queue_interface.h
 ros/time.h
@@ -374,8 +442,6 @@ boost/shared_ptr.hpp
 boost/thread/mutex.hpp
 -
 boost/thread/shared_mutex.hpp
--
-boost/thread/condition_variable.hpp
 -
 boost/thread/tss.hpp
 -
@@ -605,6 +671,8 @@ ros/rate.h
 /opt/ros/kinetic/include/ros/ros/rate.h
 ros/wall_timer.h
 /opt/ros/kinetic/include/ros/ros/wall_timer.h
+ros/steady_timer.h
+/opt/ros/kinetic/include/ros/ros/steady_timer.h
 ros/advertise_options.h
 /opt/ros/kinetic/include/ros/ros/advertise_options.h
 ros/advertise_service_options.h
@@ -857,6 +925,20 @@ boost/shared_ptr.hpp
 /opt/ros/kinetic/include/ros/static_assert.h
 boost/static_assert.hpp
 -
+
+/opt/ros/kinetic/include/ros/steady_timer.h
+common.h
+/opt/ros/kinetic/include/ros/common.h
+forwards.h
+/opt/ros/kinetic/include/ros/forwards.h
+steady_timer_options.h
+/opt/ros/kinetic/include/ros/steady_timer_options.h
+
+/opt/ros/kinetic/include/ros/steady_timer_options.h
+common.h
+/opt/ros/kinetic/include/ros/common.h
+ros/forwards.h
+/opt/ros/kinetic/include/ros/ros/forwards.h
 
 /opt/ros/kinetic/include/ros/subscribe_options.h
 ros/forwards.h

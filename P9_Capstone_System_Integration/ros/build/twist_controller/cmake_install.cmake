@@ -1,8 +1,8 @@
-# Install script for directory: /home/student/CarND-Capstone/ros/src/twist_controller
+# Install script for directory: /home/workspace/CarND-Capstone/ros/src/twist_controller
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/student/CarND-Capstone/ros/install")
+  set(CMAKE_INSTALL_PREFIX "/home/workspace/CarND-Capstone/ros/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -32,18 +32,23 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/student/CarND-Capstone/ros/build/twist_controller/catkin_generated/installspace/twist_controller.pc")
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/build/twist_controller/catkin_generated/installspace/twist_controller.pc")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/twist_controller/cmake" TYPE FILE FILES
-    "/home/student/CarND-Capstone/ros/build/twist_controller/catkin_generated/installspace/twist_controllerConfig.cmake"
-    "/home/student/CarND-Capstone/ros/build/twist_controller/catkin_generated/installspace/twist_controllerConfig-version.cmake"
+    "/home/workspace/CarND-Capstone/ros/build/twist_controller/catkin_generated/installspace/twist_controllerConfig.cmake"
+    "/home/workspace/CarND-Capstone/ros/build/twist_controller/catkin_generated/installspace/twist_controllerConfig-version.cmake"
     )
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/twist_controller" TYPE FILE FILES "/home/student/CarND-Capstone/ros/src/twist_controller/package.xml")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/twist_controller" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/src/twist_controller/package.xml")
 endif()
 

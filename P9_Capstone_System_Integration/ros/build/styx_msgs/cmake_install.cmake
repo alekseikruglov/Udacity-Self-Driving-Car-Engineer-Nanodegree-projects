@@ -1,8 +1,8 @@
-# Install script for directory: /home/student/CarND-Capstone/ros/src/styx_msgs
+# Install script for directory: /home/workspace/CarND-Capstone/ros/src/styx_msgs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/student/CarND-Capstone/ros/install")
+  set(CMAKE_INSTALL_PREFIX "/home/workspace/CarND-Capstone/ros/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -32,59 +32,64 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs/msg" TYPE FILE FILES
-    "/home/student/CarND-Capstone/ros/src/styx_msgs/msg/TrafficLight.msg"
-    "/home/student/CarND-Capstone/ros/src/styx_msgs/msg/TrafficLightArray.msg"
-    "/home/student/CarND-Capstone/ros/src/styx_msgs/msg/Waypoint.msg"
-    "/home/student/CarND-Capstone/ros/src/styx_msgs/msg/Lane.msg"
+    "/home/workspace/CarND-Capstone/ros/src/styx_msgs/msg/TrafficLight.msg"
+    "/home/workspace/CarND-Capstone/ros/src/styx_msgs/msg/TrafficLightArray.msg"
+    "/home/workspace/CarND-Capstone/ros/src/styx_msgs/msg/Waypoint.msg"
+    "/home/workspace/CarND-Capstone/ros/src/styx_msgs/msg/Lane.msg"
     )
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs/cmake" TYPE FILE FILES "/home/student/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgs-msg-paths.cmake")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs/cmake" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgs-msg-paths.cmake")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/student/CarND-Capstone/ros/devel/include/styx_msgs")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/workspace/CarND-Capstone/ros/devel/include/styx_msgs")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/student/CarND-Capstone/ros/devel/share/roseus/ros/styx_msgs")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/workspace/CarND-Capstone/ros/devel/share/roseus/ros/styx_msgs")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/student/CarND-Capstone/ros/devel/share/common-lisp/ros/styx_msgs")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/workspace/CarND-Capstone/ros/devel/share/common-lisp/ros/styx_msgs")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/student/CarND-Capstone/ros/devel/share/gennodejs/ros/styx_msgs")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/workspace/CarND-Capstone/ros/devel/share/gennodejs/ros/styx_msgs")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/student/CarND-Capstone/ros/devel/lib/python2.7/dist-packages/styx_msgs")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  execute_process(COMMAND "/opt/carndcapstone/venv/bin/python2" -m compileall "/home/workspace/CarND-Capstone/ros/devel/lib/python2.7/dist-packages/styx_msgs")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/student/CarND-Capstone/ros/devel/lib/python2.7/dist-packages/styx_msgs")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/workspace/CarND-Capstone/ros/devel/lib/python2.7/dist-packages/styx_msgs")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/student/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgs.pc")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgs.pc")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs/cmake" TYPE FILE FILES "/home/student/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgs-msg-extras.cmake")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs/cmake" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgs-msg-extras.cmake")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs/cmake" TYPE FILE FILES
-    "/home/student/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgsConfig.cmake"
-    "/home/student/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgsConfig-version.cmake"
+    "/home/workspace/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgsConfig.cmake"
+    "/home/workspace/CarND-Capstone/ros/build/styx_msgs/catkin_generated/installspace/styx_msgsConfig-version.cmake"
     )
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs" TYPE FILE FILES "/home/student/CarND-Capstone/ros/src/styx_msgs/package.xml")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/styx_msgs" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/src/styx_msgs/package.xml")
 endif()
 

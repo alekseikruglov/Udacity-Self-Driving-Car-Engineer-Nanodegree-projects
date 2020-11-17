@@ -1,14 +1,14 @@
 
 "use strict";
 
-let TrafficLightArray = require('./TrafficLightArray.js');
 let Waypoint = require('./Waypoint.js');
-let TrafficLight = require('./TrafficLight.js');
 let Lane = require('./Lane.js');
+let TrafficLightArray = require('./TrafficLightArray.js');
+let TrafficLight = require('./TrafficLight.js');
 
 module.exports = {
-  TrafficLightArray: TrafficLightArray,
   Waypoint: Waypoint,
-  TrafficLight: TrafficLight,
   Lane: Lane,
+  TrafficLightArray: TrafficLightArray,
+  TrafficLight: TrafficLight,
 };

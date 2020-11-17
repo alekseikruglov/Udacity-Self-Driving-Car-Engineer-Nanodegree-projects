@@ -15,6 +15,8 @@ from scipy.spatial import KDTree
 
 STATE_COUNT_THRESHOLD = 3
 
+
+
 class TLDetector(object):
     def __init__(self):
         rospy.init_node('tl_detector')
@@ -53,6 +55,8 @@ class TLDetector(object):
         self.last_state = TrafficLight.UNKNOWN
         self.last_wp = -1
         self.state_count = 0
+        
+        self.camera_image_counter = 0
 
         rospy.spin()
 
@@ -76,33 +80,41 @@ class TLDetector(object):
             msg (Image): image from car-mounted camera
 
         """
-        self.has_image = True
-        self.camera_image = msg
-        light_wp, state = self.process_traffic_lights()
+        
+        # process only each 2-nd camera image to improve latency
+        if self.camera_image_counter >=1:
+            
+            self.has_image = True
+            self.camera_image = msg
+            light_wp, state = self.process_traffic_lights()
 
-        '''
-        Publish upcoming red lights at camera frequency.
-        Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
-        of times till we start using it. Otherwise the previous stable state is
-        used.
-        '''
+            '''
+            Publish upcoming red lights at camera frequency.
+            Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
+            of times till we start using it. Otherwise the previous stable state is
+            used.
+            '''
 
-        # rate = rospy.Rate(10)
-        # while not rospy.is_shutdown():
-        #     self.upcoming_red_light_pub.publish(Int32(0))
-        #     rate.sleep()
+            # rate = rospy.Rate(10)
+            # while not rospy.is_shutdown():
+            #     self.upcoming_red_light_pub.publish(Int32(0))
+            #     rate.sleep()
 
-        if self.state != state:
-            self.state_count = 0
-            self.state = state
-        elif self.state_count >= STATE_COUNT_THRESHOLD:
-            self.last_state = self.state
-            light_wp = light_wp if state == TrafficLight.RED else -1
-            self.last_wp = light_wp
-            self.upcoming_red_light_pub.publish(Int32(light_wp))
-        else:
-            self.upcoming_red_light_pub.publish(Int32(self.last_wp))
-        self.state_count += 1
+            if self.state != state:
+                self.state_count = 0
+                self.state = state
+            elif self.state_count >= STATE_COUNT_THRESHOLD:
+                self.last_state = self.state
+                light_wp = light_wp if state == TrafficLight.RED else -1
+                self.last_wp = light_wp
+                self.upcoming_red_light_pub.publish(Int32(light_wp))
+            else:
+                self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+            self.state_count += 1
+            
+            self.camera_image_counter = 0
+            
+        self.camera_image_counter += 1
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
@@ -128,17 +140,28 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        print(light.state)
-        return light.state
+        #print(light.state)
+        #return light.state
 
-        # if(not self.has_image):
-        #     self.prev_light_loc = None
-        #     return False
+        if not self.has_image:
+            # self.prev_light_loc = None
+            return TrafficLight.UNKNOWN
 
-        # cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
+        img = self.bridge.imgmsg_to_cv2(self.camera_image, 'bgr8')
 
-        # #Get classification
-        # return self.light_classifier.get_classification(cv_image)
+        #Get classification
+        classifierPrediciton = self.light_classifier.get_classification(img)
+
+        if classifierPrediciton == TrafficLight.RED:
+            print('classifierPrediciton: RED')
+        elif classifierPrediciton == TrafficLight.YELLOW:
+            print('classifierPrediciton: YELLOW')
+        elif classifierPrediciton == TrafficLight.GREEN:
+            print('classifierPrediciton: GREEN')
+        else:
+            print('classifierPrediciton: UNKNOWN')
+        
+        return classifierPrediciton
 
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its

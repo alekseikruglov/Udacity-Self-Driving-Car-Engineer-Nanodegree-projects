@@ -1,8 +1,8 @@
-# Install script for directory: /home/student/CarND-Capstone/ros/src/waypoint_updater
+# Install script for directory: /home/workspace/CarND-Capstone/ros/src/waypoint_updater
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/student/CarND-Capstone/ros/install")
+  set(CMAKE_INSTALL_PREFIX "/home/workspace/CarND-Capstone/ros/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -32,18 +32,23 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/student/CarND-Capstone/ros/build/waypoint_updater/catkin_generated/installspace/waypoint_updater.pc")
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/build/waypoint_updater/catkin_generated/installspace/waypoint_updater.pc")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/waypoint_updater/cmake" TYPE FILE FILES
-    "/home/student/CarND-Capstone/ros/build/waypoint_updater/catkin_generated/installspace/waypoint_updaterConfig.cmake"
-    "/home/student/CarND-Capstone/ros/build/waypoint_updater/catkin_generated/installspace/waypoint_updaterConfig-version.cmake"
+    "/home/workspace/CarND-Capstone/ros/build/waypoint_updater/catkin_generated/installspace/waypoint_updaterConfig.cmake"
+    "/home/workspace/CarND-Capstone/ros/build/waypoint_updater/catkin_generated/installspace/waypoint_updaterConfig-version.cmake"
     )
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/waypoint_updater" TYPE FILE FILES "/home/student/CarND-Capstone/ros/src/waypoint_updater/package.xml")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/waypoint_updater" TYPE FILE FILES "/home/workspace/CarND-Capstone/ros/src/waypoint_updater/package.xml")
 endif()
 

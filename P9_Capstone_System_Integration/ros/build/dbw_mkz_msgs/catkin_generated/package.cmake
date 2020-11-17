@@ -10,4 +10,7 @@ set(dbw_mkz_msgs_EXEC_DEPENDS "message_runtime" "rosbag_migration_rule" "std_msg
 set(dbw_mkz_msgs_RUN_DEPENDS "message_runtime" "rosbag_migration_rule" "std_msgs" "geometry_msgs")
 set(dbw_mkz_msgs_TEST_DEPENDS )
 set(dbw_mkz_msgs_DOC_DEPENDS )
+set(dbw_mkz_msgs_URL_WEBSITE "http://dataspeedinc.com")
+set(dbw_mkz_msgs_URL_BUGTRACKER "https://bitbucket.org/dataspeedinc/dbw_mkz_ros/issues")
+set(dbw_mkz_msgs_URL_REPOSITORY "https://bitbucket.org/dataspeedinc/dbw_mkz_ros")
 set(dbw_mkz_msgs_DEPRECATED "")
