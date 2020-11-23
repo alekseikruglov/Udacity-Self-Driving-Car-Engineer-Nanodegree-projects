@@ -32,7 +32,6 @@ class Controller(object):
         ts = 0.02 # sample time
         self.vel_lpf = LowPassFilter(tau, ts)
         
-        #self.steer_lpf = LowPassFilter(0.8, 0.02)
 
         self.vehicle_mass = vehicle_mass
         self.fuel_capacity = fuel_capacity
@@ -54,8 +53,6 @@ class Controller(object):
         current_vel = self.vel_lpf.filt(current_vel)
 
         steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel)
-        # Workaround:
-        #steering = self.steer_lpf.filt(steering)
 
         vel_error = linear_vel - current_vel
         self.last_vel = current_vel

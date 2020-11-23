@@ -5,12 +5,7 @@ import numpy as np
 from std_msgs.msg import Int32
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
-# from std_msgs.msg import Int32
 from scipy.spatial import KDTree
-
-# from shared_utils.topics import Topics
-# from shared_utils.params import Params
-# from shared_utils.node_names import NodeNames
 
 import math
 
@@ -36,23 +31,18 @@ class WaypointUpdater(object):
     def __init__(self):
         rospy.init_node('waypoint_updater')
 
-        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size=2)
-        rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb, queue_size=8)
+        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size=1)
+        rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb, queue_size=1)
         
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
-        # Topics.TrafficWaypoint.Subscriber(self.traffic_cb, queue_size=1)
 
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
-
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
         # TODO: Add other member variables you need below
-
-        #self.final_waypoints_pub = Topics.FinalWaypoints.Publisher(queue_size=1)
-
-        
+      
         self.pose = None
         self.base_waypoints = None
         self.waypoints_2d = None
@@ -129,17 +119,13 @@ class WaypointUpdater(object):
 
     def pose_cb(self, msg):
         # TODO: Implement
-        # rospy.loginfo('pose_cb')
-        # rospy.loginfo('msg: {}'.format(msg))
         self.pose = msg
 
     def waypoints_cb(self, waypoints):
-        # rospy.loginfo('waypoints_cb')
-        #rospy.loginfo('msg: {}'.format(waypoints))
-        self.base_lane = waypoints
-        # rospy.logwarn("init waypoints")
 
-        # Setup the Kd Tree which has log(n) complexity
+        self.base_lane = waypoints
+
+        # Setup the Kd Tree
         if not self.waypoints_2d:
             self.waypoints_2d = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoint_tree = KDTree(self.waypoints_2d)

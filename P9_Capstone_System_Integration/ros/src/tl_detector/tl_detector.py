@@ -16,7 +16,6 @@ from scipy.spatial import KDTree
 STATE_COUNT_THRESHOLD = 3
 
 
-
 class TLDetector(object):
     def __init__(self):
         rospy.init_node('tl_detector')
@@ -95,11 +94,6 @@ class TLDetector(object):
             used.
             '''
 
-            # rate = rospy.Rate(10)
-            # while not rospy.is_shutdown():
-            #     self.upcoming_red_light_pub.publish(Int32(0))
-            #     rate.sleep()
-
             if self.state != state:
                 self.state_count = 0
                 self.state = state
@@ -144,22 +138,21 @@ class TLDetector(object):
         #return light.state
 
         if not self.has_image:
-            # self.prev_light_loc = None
             return TrafficLight.UNKNOWN
 
-        img = self.bridge.imgmsg_to_cv2(self.camera_image, 'bgr8')
+        img = self.bridge.imgmsg_to_cv2(self.camera_image, 'bgr8')  #bgr8 - has to be converted to RGB for Keras
 
         #Get classification
         classifierPrediciton = self.light_classifier.get_classification(img)
 
-        if classifierPrediciton == TrafficLight.RED:
-            print('classifierPrediciton: RED')
-        elif classifierPrediciton == TrafficLight.YELLOW:
-            print('classifierPrediciton: YELLOW')
-        elif classifierPrediciton == TrafficLight.GREEN:
-            print('classifierPrediciton: GREEN')
-        else:
-            print('classifierPrediciton: UNKNOWN')
+#         if classifierPrediciton == TrafficLight.RED:
+#             print('classifierPrediciton: RED')
+#         elif classifierPrediciton == TrafficLight.YELLOW:
+#             print('classifierPrediciton: YELLOW')
+#         elif classifierPrediciton == TrafficLight.GREEN:
+#             print('classifierPrediciton: GREEN')
+#         else:
+#             print('classifierPrediciton: UNKNOWN')
         
         return classifierPrediciton
 
@@ -190,7 +183,6 @@ class TLDetector(object):
                     diff = d
                     closest_light = light
                     line_wp_idx = temp_wp_idx
-                    #cl_dist = line_wp_idx - car_wp_idx
 
         #if closest_light and (cl_dist < 100):
         if closest_light:
