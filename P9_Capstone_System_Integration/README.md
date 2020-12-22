@@ -17,6 +17,7 @@ The self-driving car in this project has 4 subsystems: Sensor, Perception, Plann
 <p align="center">
   <img src="./imgs/subsystems.PNG" title = "Self-driving car subsystems" alt = "Self-driving car subsystems" width = "500" />
 </p>
+
 <center>Image: Udacity Self-Driving Car Nanodegree</center>
 
 ### Sensor: 
@@ -97,7 +98,8 @@ To detect the traffic light states the Keras pretrained model [MobileNet](https:
 <p align="center">
   <img src="./imgs/model_comparison.PNG" title = "Models comparison" alt = "Models comparison" width = "500" />
 </p>
-<center>Image: ["Speed/accuracy trade-offs for modern convolutional object detectors"](https://arxiv.org/abs/1611.10012) </center>
+
+Image: ["Speed/accuracy trade-offs for modern convolutional object detectors"](https://arxiv.org/abs/1611.10012) 
 
 
 In this project the higher prediction speed of the model is important to avoid latency, so the MobileNet model was chosen.
@@ -109,6 +111,7 @@ The MobileNet was finetuned to detect the traffic lights. The last 6 layers were
 <p align="center">
   <img src="./imgs/model_summary.PNG" title = "Model summary" alt = "Model summary" width = "505" />
 </p>
+
 <center>Model summary, last layers</center>
 
 #### Model training
@@ -119,6 +122,7 @@ The images dataset [(can be downloaded from Google Drive)](https://drive.google.
 <p align="center">
   <img src="./imgs/traffic_lights.png" title = "Traffic light images" alt = "Traffic light images" width = "700" />
 </p>
+
 <center>Traffic light images from Udacity simulator, used for model training</center>
 
 
