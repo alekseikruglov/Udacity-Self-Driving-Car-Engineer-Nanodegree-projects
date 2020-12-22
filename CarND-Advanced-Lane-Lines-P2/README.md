@@ -24,7 +24,7 @@ The detection of lane lines using computer vision approach is implemented in thi
 
 
 ## Dependencies
-If you have already installed all the necessary dependencies for the projects in term 1 you should be good to go! If not, you should install them to get started on this project => [Getting Started for Term 1](https://github.com/woges/UDACITY-self-driving-car/tree/master/term1_How_to_get_started).
+The necessary dependencies are described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) 
 
 ## Basic Build Instructions
 * Clone or fork this repository.

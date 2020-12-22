@@ -30,6 +30,7 @@ The self-driving car path is generated with following steps:
 <p align="center">
   <img src="./images/behaviour_planning_overview.png" title = "Behaviour Planning Overview" alt = "Behaviour Planning Overview" width = "400" />
 </p>
+
 <center>Image: Udacity Self-Driving Car Nanodegree</center>
 
 
@@ -44,6 +45,7 @@ The self-driving car path is generated with following steps:
 <p align="center">
   <img src="./images/trajectory_planning.png" title = "Trajectory Planning" alt = "Trajectory Planning" width = "400" />
 </p>
+
 <center>Image: Udacity Self-Driving Car Nanodegree</center>
 
 * If the car is behind a vehicle and lane change is not possible, the car adjusts it's speed to keep save distance to the front vehicle. The car speed is changed smoothly with smaller steps to avoid high jerk and acceleration. If the self-driving car gets too close (< 15 m) to the front vehicle then the braking become more intense, but still with considering of acceleration limits.
@@ -53,6 +55,7 @@ The self-driving car path is generated with following steps:
 <p align="center">
   <img src="./images/comparison_xy_frenet.PNG" title = "Comparison XY and Frenet Coordinate Systems" alt = "Comparison XY and Frenet Coordinate Systems" width = "400" />
 </p>
+
 <center>Image: Udacity Self-Driving Car Nanodegree</center>
 
 

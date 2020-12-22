@@ -25,7 +25,6 @@ Once the install for uWebSocketIO is complete, the main program can be built and
 5. ./particle_filter
 
 
-Note that the programs that need to be written to accomplish the project are src/particle_filter.cpp, and particle_filter.h
 
 ## Goal of this project
 

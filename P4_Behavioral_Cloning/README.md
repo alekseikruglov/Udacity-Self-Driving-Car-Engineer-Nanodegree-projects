@@ -23,7 +23,7 @@ The following resources can be found in this github repository:
 * video.py
 * writeup_template.md
 
-The simulator can be downloaded from the classroom. In the classroom, we have also provided sample data that you can optionally use to help train your model.
+The simulator can be downloaded [here](https://github.com/udacity/self-driving-car-sim)
 
 ## Details About Files In This Repository
 
