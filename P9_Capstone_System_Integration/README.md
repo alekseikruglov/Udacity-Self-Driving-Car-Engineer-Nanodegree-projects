@@ -1,8 +1,8 @@
-# Capstone System Integration Project: Programming a Real Self-Driving Car
+# Capstone System Integration Project
 
 ## Overview
 
-This is the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. The goal of this project is to make the Self-Driving Car able to drive on the test track by following the waypoints and stopping on traffic lights.
+This is the final project of the Udacity Self-Driving Car Nanodegree. The goal of this project is to make the Self-Driving Car able to drive on the test track by following the waypoints and stopping on traffic lights.
 
 <p align="center">
   <img src="./imgs/result.gif" title = "Traffic light images" alt = "Traffic light images" width = "500" />
